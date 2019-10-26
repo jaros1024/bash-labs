@@ -2,15 +2,16 @@
 
 WYGRANA="0"
 GRACZ="2"
+WEJSCIE=""
 
 PLANSZA=("0" "0" "0" "0" "0" "0" "0" "0" "0")
 
 function wyswietl {
-    clear
+    # clear
     echo "Plansza"
-    echo "${PLANSZA[0]} | ${PLANSZA[1] | ${PLANSZA[2]}"
-    echo "${PLANSZA[3]} | ${PLANSZA[4] | ${PLANSZA[5]}"
-    echo "${PLANSZA[6]} | ${PLANSZA[7] | ${PLANSZA[8]}"
+    echo "${PLANSZA[0]} | ${PLANSZA[1]} | ${PLANSZA[2]}"
+    echo "${PLANSZA[3]} | ${PLANSZA[4]} | ${PLANSZA[5]}"
+    echo "${PLANSZA[6]} | ${PLANSZA[7]} | ${PLANSZA[8]}"
 }
 
 function potwierdzWygrana {
@@ -32,10 +33,9 @@ function sprawdzWygrana {
         then
             potwierdzWygrana
         fi
-        
     done
     
-    if [ ${PLANSZA[0]} -eq $GRACZ] && [ ${PLANSZA[4]} -eq $GRACZ ] && [ ${PLANSZA[8]} -eq $GRACZ ]
+    if [ ${PLANSZA[0]} -eq $GRACZ ] && [ ${PLANSZA[4]} -eq $GRACZ ] && [ ${PLANSZA[8]} -eq $GRACZ ]
     then
         potwierdzWygrana
     fi
@@ -58,23 +58,24 @@ function zmianaGracza {
 }
 
 function pobierzPole {
-    while read pole
+    echo "Podaj pole"
+    read WEJSCIE
+    while [ $WEJSCIE -gt 8 ] || [ $WEJSCIE -lt 0 ] || [ ${PLANSZA[$WEJSCIE]} -ne 0 ]
     do
-        if [ $pole -gt 8 ] || [ $pole -lt 0 ] || [ $PLANSZA[$pole] -ne 0 ]
-        then
-            echo "Nieprawidlowe pole"
-        else
-            return $pole
-        fi
+        echo "Nieprawidlowe pole!"
+        echo "Podaj pole"
+        read WEJSCIE
     done
+    return $WEJSCIE
 }
         
 echo "Kolko i krzyzyk"
-while !$WYGRANA
+while [ $WYGRANA -eq "0" ]
 do
+    wyswietl
     zmianaGracza
-    POLE=pobierzPole
-    $PLANSZA[$POLE]=$GRACZ
+    pobierzPole
+    PLANSZA[$WEJSCIE]=$GRACZ
     sprawdzWygrana
 done
 
